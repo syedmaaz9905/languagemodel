@@ -1,0 +1,133 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.input-container {
+  margin-bottom: 20px;
+}
+
+#questionInput {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.button-container {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+#submitButton {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#submitButton:hover {
+  background-color: #45a049;
+}
+
+#submitButton.loading {
+  background-color: #999999;
+  transform: scale(0.9);
+  display: flex;
+  align-items: center;
+}
+
+#submitButton.loading::after {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  border-top-color: #45a049;
+  animation: spin 1s linear infinite;
+  margin-left: 5px;
+}
+
+.output-container {
+  margin-top: 20px;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+.answer-container {
+  position: relative;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  background-color: #f0f0f0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  animation-duration: 0.5s;
+}
+
+.remove-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 16px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.remove-button:hover {
+  color: red;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

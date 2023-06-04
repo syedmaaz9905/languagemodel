@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>DALAI</title>
+  <link rel="stylesheet" type="text/css" href="http://localhost:3000/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Ask a Question</h1>
+    <div class="input-container">
+      <input type="text" id="questionInput" placeholder="Type your question here...">
+    </div>
+    <div class="button-container">
+      <button id="submitButton" onclick="ajaxCall();">Go</button>
+      <!-- <button id="cancelButton" onclick="cancelAnswer()" style="display: none;">Cancel</button> -->
+    </div>
+    <div class="output-container">
+      <h2>Answer:</h2>
+      <div id="answerOutput"></div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <!-- <script> (OLD)
+    function ajaxCall() {
+      $.ajax({
+
+        // Our sample url to make request
+        url:
+          'http://localhost:3000/dalai_inference',
+
+        // Type of Request
+        type: "POST",
+        data: {"text": document.getElementById('questionInput').value},
+        
+
+        // Function to call when to
+        // request is ok
+        success: function (data) {
+          var data_text = '\n\n' + data;
+          document.getElementById('answerOutput').innerHTML+=data_text;
+          console.log(data)
+          // var x = JSON.stringify(data);
+          // console.log(x);
+        },
+
+        // Error handling
+        error: function (error) {
+          console.log(`Error ${error}`);
+        }
+      });
+    }
+  </script> -->
+
+
+  <!-- <script> NEW SAME OUTPUT AS LANGUAGE MODEL GIVES UT GOING OUT OF DIV
+    function ajaxCall() {
+      $.ajax({
+        url: 'http://localhost:3000/dalai_inference',
+        type: 'POST',
+        data: { text: document.getElementById('questionInput').value },
+        success: function (data) {
+          var answerContainer = document.createElement('div');
+          answerContainer.classList.add('answer-container');
+
+          var question = document.createElement('h3');
+          question.textContent = 'Question: ' + document.getElementById('questionInput').value;
+
+          var answerText = document.createElement('pre');
+          answerText.textContent = data; // Preserve the exact format of the answer
+
+          answerContainer.appendChild(question);
+          answerContainer.appendChild(answerText);
+
+          document.getElementById('answerOutput').appendChild(answerContainer);
+        },
+        error: function (error) {
+          console.log('Error:', error);
+        }
+      });
+    }
+  </script> -->
+
+
+  <script>
+    function ajaxCall() {
+      var submitButton = document.getElementById('submitButton');
+      submitButton.classList.add('loading');
+      submitButton.setAttribute('disabled', 'disabled');
+
+      $.ajax({
+        url: 'http://localhost:3000/dalai_inference',
+        type: 'POST',
+        data: { text: document.getElementById('questionInput').value },
+
+        success: function (data) {
+          submitButton.classList.remove('loading');
+          submitButton.removeAttribute('disabled');
+
+          var answerContainer = document.createElement('div');
+          answerContainer.classList.add('answer-container', 'animate__animated', 'animate__fadeIn');
+
+          var question = document.createElement('h3');
+          question.textContent = 'Question: ' + document.getElementById('questionInput').value;
+
+          var answer = document.createElement('p');
+          answer.textContent = 'Answer: ' + data;
+
+          var removeButton = document.createElement('button');
+          removeButton.innerHTML = '<i class="fas fa-times"></i>';
+          removeButton.classList.add('remove-button', 'animate__animated', 'animate__bounceIn');
+          removeButton.onclick = function () {
+            answerContainer.classList.remove('animate__fadeIn');
+            answerContainer.classList.add('animate__fadeOut');
+            setTimeout(function () {
+              answerContainer.remove();
+            }, 500);
+          };
+
+          answerContainer.appendChild(question);
+          answerContainer.appendChild(answer);
+          answerContainer.appendChild(removeButton);
+
+          document.getElementById('answerOutput').appendChild(answerContainer);
+        },
+
+        error: function (error) {
+          console.log('Error:', error);
+          submitButton.classList.remove('loading');
+          submitButton.removeAttribute('disabled');
+        }
+      });
+    }
+  </script>
+
+
+
+  <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
+  <script type="module" src="index.js"></script>
+</body>
+
+</html>
