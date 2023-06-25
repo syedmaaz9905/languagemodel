@@ -9,6 +9,7 @@
 </head>
 
 <body>
+
   <div class="container">
     <h1>Ask a Question</h1>
     <div class="input-container">
@@ -16,7 +17,9 @@
     </div>
     <div class="button-container">
       <button id="submitButton" onclick="ajaxCall();">Go</button>
+      <!-- ***************************************************************************** -->
       <!-- <button id="cancelButton" onclick="cancelAnswer()" style="display: none;">Cancel</button> -->
+      <!-- ***************************************************************************** -->
     </div>
     <div class="output-container">
       <h2>Answer:</h2>
@@ -24,67 +27,25 @@
     </div>
   </div>
 
+  <!-- <div class="container">
+    <h1>CV Generator</h1>
+    <div class="input-container">
+      <input type="text" id="titleInput" placeholder="Title">
+    </div>
+    <div class="input-container">
+      <textarea id="summaryInput" placeholder="Summary"></textarea>
+    </div>
+    <div class="button-container">
+      <button id="submitButton" onclick="ajaxCall();">Generate CV</button>
+    </div>
+    <div class="output-container">
+      <h2>Generated CV:</h2>
+      <div id="answerOutput"></div>
+    </div>
+  </div> -->
+
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <!-- <script> (OLD)
-    function ajaxCall() {
-      $.ajax({
-
-        // Our sample url to make request
-        url:
-          'http://localhost:3000/dalai_inference',
-
-        // Type of Request
-        type: "POST",
-        data: {"text": document.getElementById('questionInput').value},
-        
-
-        // Function to call when to
-        // request is ok
-        success: function (data) {
-          var data_text = '\n\n' + data;
-          document.getElementById('answerOutput').innerHTML+=data_text;
-          console.log(data)
-          // var x = JSON.stringify(data);
-          // console.log(x);
-        },
-
-        // Error handling
-        error: function (error) {
-          console.log(`Error ${error}`);
-        }
-      });
-    }
-  </script> -->
-
-
-  <!-- <script> NEW SAME OUTPUT AS LANGUAGE MODEL GIVES UT GOING OUT OF DIV
-    function ajaxCall() {
-      $.ajax({
-        url: 'http://localhost:3000/dalai_inference',
-        type: 'POST',
-        data: { text: document.getElementById('questionInput').value },
-        success: function (data) {
-          var answerContainer = document.createElement('div');
-          answerContainer.classList.add('answer-container');
-
-          var question = document.createElement('h3');
-          question.textContent = 'Question: ' + document.getElementById('questionInput').value;
-
-          var answerText = document.createElement('pre');
-          answerText.textContent = data; // Preserve the exact format of the answer
-
-          answerContainer.appendChild(question);
-          answerContainer.appendChild(answerText);
-
-          document.getElementById('answerOutput').appendChild(answerContainer);
-        },
-        error: function (error) {
-          console.log('Error:', error);
-        }
-      });
-    }
-  </script> -->
-
 
   <script>
     function ajaxCall() {
@@ -136,6 +97,54 @@
       });
     }
   </script>
+
+
+
+
+
+  <!-- <script>WORKIGN PERFECT
+    function ajaxCall() {
+      var submitButton = document.getElementById('submitButton');
+      submitButton.classList.add('loading');
+      submitButton.setAttribute('disabled', 'disabled');
+
+      var titleInput = document.getElementById('titleInput').value;
+      var summaryInput = document.getElementById('summaryInput').value;
+
+      var requestData = {
+        title: titleInput,
+        summary: summaryInput
+      };
+
+      $.ajax({
+        url: 'http://localhost:3000/dalai_inference',
+        type: 'POST',
+        data: requestData,
+
+        success: function (data) {
+          submitButton.classList.remove('loading');
+          submitButton.removeAttribute('disabled');
+
+          var answerContainer = document.createElement('div');
+          answerContainer.classList.add('answer-container', 'animate__animated', 'animate__fadeIn');
+
+          var answerText = document.createElement('pre');
+          answerText.textContent = data;
+
+          answerContainer.appendChild(answerText);
+
+          document.getElementById('answerOutput').appendChild(answerContainer);
+        },
+
+        error: function (error) {
+          console.log('Error:', error);
+          submitButton.classList.remove('loading');
+          submitButton.removeAttribute('disabled');
+        }
+      });
+    }
+
+  </script> -->
 
 
 
