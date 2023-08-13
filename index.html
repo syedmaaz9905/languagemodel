@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <title>DALAI</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, inital-scale=1.0">
+  <title>Language Model</title>
   <link rel="stylesheet" type="text/css" href="http://localhost:3000/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -10,36 +13,103 @@
 
 <body>
 
-  <div class="container">
+
+  <main>
+    <div class="box">
+      <div class="inner-box">
+        <div class="forms-wrap">
+          <form action="index.html" autocomplete="off" class="text-form">
+            <div class="logo">
+              <img src="https://i.imgur.com/l37iiRa.png" alt="alpaca">
+              <h4>alpaca</h4>
+            </div>
+
+            <div class="heading">
+              <h2>Welcome To XYZ</h2>
+            </div>
+
+            <div class="actual-form">
+              <div class="input-wrap-text">
+                <p>Our professional CV proposal writing service is dedicated to delivering exceptional results. We
+                  create tailored CV proposals based on your specific requirements. Experience the convenience
+                  and excellence of our professional CV proposal writing service today.</p>
+              </div>
+
+              <a href="#" class="toggle">Next</a>
+            </div>
+          </form>
+
+          <form action="index.html" autocomplete="off" class="inputs-form">
+            <div class="logo">
+              <img src="https://i.imgur.com/l37iiRa.png" alt="alpaca" />
+              <h4>alpaca</h4>
+            </div>
+
+            <div class="heading-input">
+              <h2>Get Started</h2>
+              <p>Empowering Your Career with Irresistible CV Proposals</p>
+            </div>
+
+            <div class="actual-form">
+              <div class="input-wrap">
+                <input type="text" id="questionInput" minlength="4" class="input-field" autocomplete="off" required />
+                <label>Name</label>
+              </div>
+
+              <div class="input-wrap">
+                <input type="text" id="questionInputtwo" class="input-field" autocomplete="off" required />
+                <label>Summary</label>
+              </div>
+
+              <div class="button-container">
+                <button id="submitButton" onclick="ajaxCall();">Go</button>
+              </div>
+
+            </div>
+          </form>
+        </div>
+
+        <div class="carousel">
+          <div class="images-wrapper">
+            <img src="https://i.imgur.com/XRGCLdq.png" class="image img-1" alt="">
+            <img src="https://i.imgur.com/OI4LZqm.png" class="image img-2" alt="">
+            <img src="https://i.imgur.com/3EzOV4X.png" class="image img-3" alt="">
+          </div>
+
+          <div class="text-slider">
+            <div class="text-wrap">
+              <div class="text-group">
+                <h2>Perfect CV Proposals for Your Success</h2>
+                <h2>Tailored CVs: Your Path to Success</h2>
+                <h2>Crafting Winning CV Proposals</h2>
+              </div>
+            </div>
+
+            <div class="bullets">
+              <span class="active" data-value="1"></span>
+              <span data-value="2"></span>
+              <span data-value="3"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+  <!-- <div class="container">
     <h1>Ask a Question</h1>
     <div class="input-container">
       <input type="text" id="questionInput" placeholder="Type your question here...">
     </div>
+    <div class="input-container">
+      <input type="text" id="questionInputtwo" placeholder="Type your question here...">
+    </div>
     <div class="button-container">
       <button id="submitButton" onclick="ajaxCall();">Go</button>
-      <!-- ***************************************************************************** -->
-      <!-- <button id="cancelButton" onclick="cancelAnswer()" style="display: none;">Cancel</button> -->
-      <!-- ***************************************************************************** -->
     </div>
     <div class="output-container">
       <h2>Answer:</h2>
-      <div id="answerOutput"></div>
-    </div>
-  </div>
-
-  <!-- <div class="container">
-    <h1>CV Generator</h1>
-    <div class="input-container">
-      <input type="text" id="titleInput" placeholder="Title">
-    </div>
-    <div class="input-container">
-      <textarea id="summaryInput" placeholder="Summary"></textarea>
-    </div>
-    <div class="button-container">
-      <button id="submitButton" onclick="ajaxCall();">Generate CV</button>
-    </div>
-    <div class="output-container">
-      <h2>Generated CV:</h2>
       <div id="answerOutput"></div>
     </div>
   </div> -->
@@ -50,26 +120,52 @@
   <script>
     function ajaxCall() {
       var submitButton = document.getElementById('submitButton');
+      var nameInput = document.getElementById('questionInput');
+      var summaryInput = document.getElementById('questionInputtwo');
+
+      if (nameInput.value.trim() === '' || summaryInput.value.trim() === '') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Please fill in all fields.',
+        });
+        return;
+      }
+
       submitButton.classList.add('loading');
       submitButton.setAttribute('disabled', 'disabled');
 
       $.ajax({
         url: 'http://localhost:3000/dalai_inference',
         type: 'POST',
-        data: { text: document.getElementById('questionInput').value },
+        data: { text: document.getElementById('questionInput').value, text: document.getElementById('questionInputtwo').value },
 
         success: function (data) {
           submitButton.classList.remove('loading');
           submitButton.removeAttribute('disabled');
 
-          var answerContainer = document.createElement('div');
-          answerContainer.classList.add('answer-container', 'animate__animated', 'animate__fadeIn');
+
+
+          var popupModal = document.getElementById('popupModal');
+          var popupAnswerOutput = document.getElementById('popupAnswerOutput');
+
+
+
+          // var answerContainer = document.createElement('div');
+          // answerContainer.classList.add('answer-container', 'animate__animated', 'animate__fadeIn');
 
           var question = document.createElement('h3');
-          question.textContent = 'Question: ' + document.getElementById('questionInput').value;
+          question.textContent = 'Question: Write a CV proposal with the following name ' + document.getElementById('questionInput').value + ' and with the summary ' + document.getElementById('questionInputtwo').value;
 
-          var answer = document.createElement('p');
-          answer.textContent = 'Answer: ' + data;
+          // var answer = document.createElement('p');
+          // answer.textContent = 'Answer: ' + data;
+          popupAnswerOutput.innerHTML = 'Answer: ' + data;
+          popupModal.style.display = 'block';
+
+          var closeButton = document.querySelector('.close');
+          closeButton.onclick = function () {
+            popupModal.style.display = 'none';
+          };
 
           var removeButton = document.createElement('button');
           removeButton.innerHTML = '<i class="fas fa-times"></i>';
@@ -98,58 +194,74 @@
     }
   </script>
 
+  <script>
+    const inputs = document.querySelectorAll(".input-field");
+    const toggle_btn = document.querySelectorAll(".toggle");
+    const main = document.querySelector("main");
+    const bullets = document.querySelectorAll(".bullets span");
+    const images = document.querySelectorAll(".image");
 
-
-
-
-  <!-- <script>WORKIGN PERFECT
-    function ajaxCall() {
-      var submitButton = document.getElementById('submitButton');
-      submitButton.classList.add('loading');
-      submitButton.setAttribute('disabled', 'disabled');
-
-      var titleInput = document.getElementById('titleInput').value;
-      var summaryInput = document.getElementById('summaryInput').value;
-
-      var requestData = {
-        title: titleInput,
-        summary: summaryInput
-      };
-
-      $.ajax({
-        url: 'http://localhost:3000/dalai_inference',
-        type: 'POST',
-        data: requestData,
-
-        success: function (data) {
-          submitButton.classList.remove('loading');
-          submitButton.removeAttribute('disabled');
-
-          var answerContainer = document.createElement('div');
-          answerContainer.classList.add('answer-container', 'animate__animated', 'animate__fadeIn');
-
-          var answerText = document.createElement('pre');
-          answerText.textContent = data;
-
-          answerContainer.appendChild(answerText);
-
-          document.getElementById('answerOutput').appendChild(answerContainer);
-        },
-
-        error: function (error) {
-          console.log('Error:', error);
-          submitButton.classList.remove('loading');
-          submitButton.removeAttribute('disabled');
-        }
+    inputs.forEach((inp) => {
+      inp.addEventListener("focus", () => {
+        inp.classList.add("active");
       });
+      inp.addEventListener("blur", () => {
+        if (inp.value != "") return;
+        inp.classList.remove("active");
+      });
+    });
+
+    toggle_btn.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        main.classList.toggle("sign-up-mode");
+      });
+    });
+
+    function moveSlider() {
+      let index = this.dataset.value;
+
+      let currentImage = document.querySelector(`.img-${index}`);
+      images.forEach((img) => img.classList.remove("show"));
+      currentImage.classList.add("show");
+
+      const textSlider = document.querySelector(".text-group");
+      textSlider.style.transform = `translateY(${-(index - 1) * 2.2}rem)`;
+
+      bullets.forEach((bull) => bull.classList.remove("active"));
+      this.classList.add("active");
     }
 
-  </script> -->
+    function autoSwitchSlider() {
+      const bullets = document.querySelectorAll(".bullets span");
+      const totalBullets = bullets.length;
+      let currentIndex = 0;
 
+      setInterval(() => {
+        currentIndex = (currentIndex + 1) % totalBullets;
 
+        const bulletToClick = bullets[currentIndex];
+        bulletToClick.click();
+      }, 2000);
+    }
+
+    autoSwitchSlider();
+
+    bullets.forEach((bullet) => {
+      bullet.addEventListener("click", moveSlider);
+    });
+  </script>
 
   <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
   <script type="module" src="index.js"></script>
+
+
+  <div id="popupModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Answer:</h2>
+      <div id="popupAnswerOutput"></div>
+    </div>
+  </div>
 </body>
 
 </html>
